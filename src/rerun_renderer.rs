@@ -13,10 +13,7 @@ pub struct RerunHost {
 impl RerunHost {
     pub fn new(app_name: &str) -> anyhow::Result<Self> {
         let rec = RecordingStreamBuilder::new(app_name).spawn()?;
-        Ok(Self {
-            rec,
-            search_paths: vec![],
-        })
+        Ok(Self { rec, search_paths: vec![] })
     }
 }
 

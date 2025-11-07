@@ -143,10 +143,6 @@ impl<'a, R> EntityBuilder<'a> for RerunRobotBuilder<'a, R> {
             format!("world/robots/{}", self.name),
         )?;
         loader.register_statics(&self.rerun.clone_weak(), self.base.unwrap_or_default())?;
-        Ok(RerunRobot {
-            _marker: PhantomData,
-            loader,
-            rerun: self.rerun.clone_weak(),
-        })
+        Ok(RerunRobot { _marker: PhantomData, loader, rerun: self.rerun.clone_weak() })
     }
 }
