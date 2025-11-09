@@ -1,6 +1,6 @@
 [package]
 name = "roplat_rerun"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 authors = ["Yixing <yanjizhou312@163.com>"]
 readme = "README.md"
@@ -11,7 +11,7 @@ keywords = ["robot", "robotics", "rerun", "visualization", "roplat"]
 
 [dependencies]
 rerun = "0.26.0"
-robot_behavior = { version = "0.5.0", path = "../robot_behavior" }
+robot_behavior = "0.5.1"
 rerun_urdf = { version = "0.1.0", path = "../rerun_urdf" }
 rsbullet = { version = "0.3.0", path = "../rsbullet/rsbullet" }
 nalgebra = "0.34.1"
