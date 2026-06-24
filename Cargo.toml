@@ -11,7 +11,7 @@ keywords = ["robot", "robotics", "rerun", "visualization", "roplat"]
 
 [dependencies]
 rerun = "0.26.0"
-robot_behavior = "0.5.4"
+robot_behavior = "0.6.0"
 rerun_urdf = { version = "0.1.0", path = "../utils/rerun_urdf" }
 rsbullet = { version = "0.3.11", path = "../rsbullet/rsbullet" }
 nalgebra = "0.34.1"

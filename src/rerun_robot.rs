@@ -4,7 +4,7 @@ use anyhow::Result;
 use nalgebra as na;
 use rerun as rr;
 use rerun_urdf::RerunUrdfLoader;
-use robot_behavior::{AttachFrom, EntityBuilder, RobotFile};
+use robot_behavior::{AttachFrom, EntityBuilder, RobotDescription};
 use rsbullet::RsBulletRobot;
 
 pub struct RerunRobot<R> {
@@ -98,13 +98,15 @@ pub struct RerunRobotBuilder<'a, R> {
     pub(crate) scaling: Option<f64>,
 }
 
-impl<'a, R: RobotFile> RerunRobotBuilder<'a, R> {
+impl<'a, R: RobotDescription> RerunRobotBuilder<'a, R> {
     pub fn new(rerun: &'a mut rr::RecordingStream) -> Self {
         Self {
             _marker: PhantomData,
             rerun,
             name: String::new(),
-            load_file: R::URDF.into(),
+            load_file: R::URDF
+                .expect("robot description must provide a URDF path")
+                .into(),
             mesh_path: None,
             base: None,
             base_fixed: false,
