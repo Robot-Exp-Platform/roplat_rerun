@@ -1,6 +1,6 @@
 [package]
 name = "roplat_rerun"
-version = "0.1.2"
+version = "0.2.0"
 edition = "2024"
 authors = ["Yixing <yanjizhou312@163.com>"]
 readme = "README.md"
@@ -11,8 +11,8 @@ keywords = ["robot", "robotics", "rerun", "visualization", "roplat"]
 
 [dependencies]
 rerun = "0.26.0"
-robot_behavior = { version = "0.6.0", git = "ssh://git@github.com/Robot-Exp-Platform/robot_behavior.git", rev = "79a3820af143a3ab75dfd3b308469482aac534c0" }
-rerun_urdf = "0.1.0"
-rsbullet = { version = "0.3.11", git = "ssh://git@github.com/Robot-Exp-Platform/rsbullet.git", rev = "804518bacad7fec80e065e5f95e1c34524cf8fdc" }
+robot_behavior = { version = "0.6.0", git = "ssh://git@github.com/Robot-Exp-Platform/robot_behavior.git", rev = "781245ca4d662a693cfb24955328a5a610859591" }
+rerun_urdf = { version = "0.1.1", git = "ssh://git@github.com/Robot-Exp-Platform/rerun_urdf.git", rev = "016e0964f9dd2463025b4140460af84259cad199" }
+rsbullet = { version = "0.4.0", git = "ssh://git@github.com/Robot-Exp-Platform/rsbullet.git", rev = "ed8dcd86d80426f0cc0e425e310e57be8194d43d" }
 nalgebra = "0.34.1"
 anyhow = "1.0.100"
