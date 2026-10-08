@@ -174,7 +174,7 @@ For recording without opening a viewer, the public `RerunHost::new` API currentl
 
 ## Next steps and license
 
-- [Public API](https://docs.rs/roplat_rerun/0.2.0/roplat_rerun/).
+- [Public API source](src/lib.rs), available while the 0.2.0 docs.rs build is unavailable.
 - [Host and model lookup](src/rerun_renderer.rs), [attachment and logged values](src/rerun_robot.rs).
 - [RsBullet](https://github.com/Robot-Exp-Platform/rsbullet) for simulation, state queries, and queued control.
 - [rerun_urdf](https://github.com/Robot-Exp-Platform/rerun_urdf) for direct recordings from a custom pose source.
