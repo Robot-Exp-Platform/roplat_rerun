@@ -19,7 +19,7 @@ The simulator remains responsible for timing and state; the visualizer consumes 
 
 ## Install and prerequisites
 
-The published crate is `roplat_rerun 0.2.0`, built around RsBullet `0.4.0`, `robot_behavior 0.6`, `rerun_urdf 0.1.1`, and Rerun `0.26`. Its current dependencies include RsBullet unconditionally. Even a visualization-only application therefore needs Rust nightly and the Bullet native build prerequisites:
+The registry example below uses `roplat_rerun 0.2.0`, RsBullet `0.4.0`, `robot_behavior 0.6`, `rerun_urdf 0.1.1`, and Rerun `0.26`. This branch prepares `roplat_rerun 0.4.0` with pinned Git sources for RsBullet `0.6.0` and `robot_behavior 0.8.0`; these prepared versions have not been uploaded to crates.io. The adapter includes RsBullet unconditionally. Even a visualization-only application therefore needs Rust nightly and the Bullet native build prerequisites:
 
 - **Windows:** MSVC C++ build tools, Windows SDK, and CMake on `PATH`.
 - **Linux:** C/C++ tools, CMake, OpenGL/GLU, and X11 development libraries. On Ubuntu: `build-essential cmake libgl1-mesa-dev libglu1-mesa-dev libx11-dev libxi-dev`.
