@@ -19,13 +19,13 @@ The simulator remains responsible for timing and state; the visualizer consumes 
 
 ## Install and prerequisites
 
-The registry example below uses `roplat_rerun 0.2.0`, RsBullet `0.4.0`, `robot_behavior 0.6`, `rerun_urdf 0.1.1`, and Rerun `0.26`. This branch prepares `roplat_rerun 0.4.0` with pinned Git sources for RsBullet `0.6.0` and `robot_behavior 0.8.0`; these prepared versions have not been uploaded to crates.io. The adapter includes RsBullet unconditionally. Even a visualization-only application therefore needs Rust nightly and the Bullet native build prerequisites:
+The registry example below uses `roplat_rerun 0.2.0`, RsBullet `0.4.0`, `robot_behavior 0.6`, `rerun_urdf 0.1.1`, and Rerun `0.26`. `roplat_rerun 0.4.0`, built on RsBullet `0.6.0` and `robot_behavior 0.8.0`, is also published on crates.io. The adapter includes RsBullet unconditionally. Even a visualization-only application therefore needs Rust nightly and the Bullet native build prerequisites:
 
 - **Windows:** MSVC C++ build tools, Windows SDK, and CMake on `PATH`.
 - **Linux:** C/C++ tools, CMake, OpenGL/GLU, and X11 development libraries. On Ubuntu: `build-essential cmake libgl1-mesa-dev libglu1-mesa-dev libx11-dev libxi-dev`.
 - **macOS:** Xcode Command Line Tools and CMake; Cocoa and OpenGL are linked by the Bullet build.
 
-There are no crate-level features to enable for this adapter. It does not require `rsbullet/roplat` for ordinary visualization. A source checkout still uses pinned Git dependencies; the registry installation below is the easier starting point.
+There are no crate-level features to enable for this adapter. It does not require `rsbullet/roplat` for ordinary visualization. A source checkout uses the same crates.io dependencies; the registry installation below is the easier starting point.
 
 `RerunHost::new` starts or connects to a Rerun Viewer through an executable on `PATH`. Install a compatible `0.26.x` Viewer before running this example, for example:
 
