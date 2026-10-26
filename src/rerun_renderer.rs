@@ -1,7 +1,7 @@
 use std::convert::Infallible;
 
 use rerun::{RecordingStream, RecordingStreamBuilder};
-use robot_behavior::{AddRobot, AddSearchPath, Renderer, RobotDescription};
+use roplat_behavior::{AddRobot, AddSearchPath, Renderer, RobotDescription};
 
 use crate::{RerunRobot, rerun_robot::RerunRobotBuilder};
 
