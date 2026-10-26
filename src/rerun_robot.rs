@@ -4,7 +4,7 @@ use anyhow::Result;
 use nalgebra as na;
 use rerun as rr;
 use rerun_urdf::RerunUrdfLoader;
-use robot_behavior::{AttachFrom, EntityBuilder, RobotDescription};
+use roplat_behavior::{AttachFrom, EntityBuilder, RobotDescription};
 use rsbullet::RsBulletRobot;
 
 pub struct RerunRobot<R> {
