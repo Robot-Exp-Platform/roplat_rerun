@@ -1,6 +1,6 @@
 # roplat_rerun
 
-`roplat_rerun` connects an RsBullet robot to a Rerun visualization. It loads the robot's URDF visuals, then records simulated link poses, joint positions, joint velocities, and motor torques as the simulation advances.
+`roplat_rerun` connects an RsBullet robot to a Rerun visualization. It loads the robot's URDF visuals, then records link poses (computed from the simulated joint positions), joint positions, joint velocities, and motor torques as the simulation advances.
 
 Use it when you already have an `RsBulletRobot<R>` and want to inspect that robot through the shared `robot_behavior` builder interfaces. For a file recorder or a different pose source, use [rerun_urdf](https://github.com/Robot-Exp-Platform/rerun_urdf) directly; it accepts a recording stream and per-link poses without requiring a simulator.
 
@@ -11,7 +11,7 @@ Use it when you already have an `RsBulletRobot<R>` and want to inspect that robo
 ```text
 URDF + meshes ────────────────> Rerun geometry
                                       ↑
-RsBullet::step() -> queued state reads -> link poses + scalar logs
+RsBullet::step() -> queued state reads -> joint positions -> link poses + scalar logs
                 -> Bullet physics step
 ```
 
@@ -19,7 +19,7 @@ The simulator remains responsible for timing and state; the visualizer consumes 
 
 ## Install and prerequisites
 
-The registry example below uses `roplat_rerun 0.2.0`, RsBullet `0.4.0`, `robot_behavior 0.6`, `rerun_urdf 0.1.1`, and Rerun `0.26`. `roplat_rerun 0.4.0`, built on RsBullet `0.6.0` and `robot_behavior 0.8.0`, is also published on crates.io. The adapter includes RsBullet unconditionally. Even a visualization-only application therefore needs Rust nightly and the Bullet native build prerequisites:
+The registry example below uses `roplat_rerun 0.2.0`, RsBullet `0.4.0`, `robot_behavior 0.6`, `rerun_urdf 0.1.1`, and Rerun `0.26`. `roplat_rerun 0.4.0`, built on RsBullet `0.6.0` and `robot_behavior 0.8.0`, is also published on crates.io. This source tree (0.5.0) needs `rerun_urdf 0.2.0` and `roplat_description`, which are not published yet; build it inside the `drives` integration workspace. The adapter includes RsBullet unconditionally. Even a visualization-only application therefore needs Rust nightly and the Bullet native build prerequisites:
 
 - **Windows:** MSVC C++ build tools, Windows SDK, and CMake on `PATH`.
 - **Linux:** C/C++ tools, CMake, OpenGL/GLU, and X11 development libraries. On Ubuntu: `build-essential cmake libgl1-mesa-dev libglu1-mesa-dev libx11-dev libxi-dev`.
@@ -152,23 +152,23 @@ The viewer receives geometry under `world/robots/demo` and 240 pose samples as t
 
 `RobotDescription::URDF` must be `Some(path)`; the builder currently panics for `None`. `RerunHost::add_search_path` searches the added directories for that relative URDF path and also supplies the matching directory as the mesh root. Give the simulator access to the same model, use the same base pose, and keep mesh filenames resolvable relative to that root. ROS `package://` paths are not resolved automatically.
 
-Link poses come from Bullet's world-frame state and are logged under `world/robots/<name>/<link>`. `rerun_urdf` labels `world` as right-handed with Z up. The example consistently uses meters and radians; the adapter copies numbers without converting units. Revolute joint positions/velocities and prismatic joint positions/velocities must be interpreted according to that joint's type and model scale.
+Link poses are logged under `world/robots/<name>/<link>`. Each frame the adapter reads the base pose and the positions of every Bullet joint whose name is a movable joint of the URDF, and computes all link frames with `roplat_description` forward kinematics. Bullet reports the base at its centre of mass; the adapter converts that to the root link's URDF frame using the base's local inertial frame. `rerun_urdf` labels `world` as right-handed with Z up. The example consistently uses meters and radians; the adapter copies numbers without converting units. Revolute joint positions/velocities and prismatic joint positions/velocities must be interpreted according to that joint's type and model scale.
 
 | Entity suffix | Value source |
 | --- | --- |
 | `joint/<i>` | Position of the i-th selected revolute/prismatic joint |
 | `joint_vel/<i>` | Velocity of that joint |
 | `torque/<i>` | Bullet's reported applied motor torque value |
-| `<link>` | Base pose or Bullet `world_link_frame` transform |
-| `cartesian_vel` | Base/link velocity samples, currently sharing one entity path |
+| `<link>` | Link frame from the base pose and joint positions; every link of the tree |
+| `cartesian_vel` | World velocity of the end-effector link (`RsBulletRobot::end_effector_link`), or of the base when that is `-1` |
 
-The numeric joint index is the position in `RsBulletRobot::joint_indices`, not a URDF joint name. Pose logging sets the `realtime` frame counter after the scalar logs are emitted, so scalar and pose samples are not guaranteed to share an exact frame timestamp. Treat this as an inspection adapter, not a synchronized measurement recorder.
+The numeric joint index is the position in `RsBulletRobot::joint_indices`, not a URDF joint name. The `realtime` frame counter is set before any sample of a step is logged, so scalars and poses of one step share it. Treat this as an inspection adapter, not a synchronized measurement recorder.
 
 ## Current boundaries
 
-The loader's initial registration is designed for a root-first serial chain. The attachment also maps URDF child links in declaration order to Bullet link indices. Verify that correspondence for your model, especially with fixed links, branching, or Bullet load flags that alter the model structure. Do not assume arbitrary URDFs map correctly by name.
+Branched trees and fixed links are supported: joints are matched by name, and the tree is walked by the model rather than by Bullet link indices. Bullet load flags that merge fixed links or rename joints break that match; joints Bullet does not report are drawn at zero.
 
-`base_fixed` and `scaling` exist on the shared builder interface, but the Rerun builder currently does not apply those settings. Use a matching unscaled URDF for this version. The adapter also contains diagnostic printing and unchecked logging results, so avoid placing it on a deadline-critical control path.
+`base_fixed` and `scaling` exist on the shared builder interface, but the Rerun builder currently does not apply those settings. Use a matching unscaled URDF for this version. Logging results are not checked, and the callback runs on the simulation queue, so avoid placing it on a deadline-critical control path.
 
 For recording without opening a viewer, the public `RerunHost::new` API currently has no file-output option or recording-stream setter. Start with the complete `.rrd` example in [rerun_urdf](https://github.com/Robot-Exp-Platform/rerun_urdf) and supply the poses you need. Keep the host alive while the simulation runs; the attached visualizer uses a weak recording-stream handle.
 
