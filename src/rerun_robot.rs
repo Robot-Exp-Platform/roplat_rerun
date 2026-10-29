@@ -4,7 +4,8 @@ use anyhow::Result;
 use nalgebra as na;
 use rerun as rr;
 use rerun_urdf::{RerunUrdfLoader, roplat_description::RobotModel};
-use roplat_behavior::{AttachFrom, EntityBuilder, RobotDescription};
+use roplat_behavior::RobotDescription;
+use roplat_world::{AttachFrom, EntityBuilder};
 use rsbullet::{BulletResult, PhysicsClient, RsBulletRobot};
 
 pub struct RerunRobot<R> {

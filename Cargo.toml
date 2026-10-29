@@ -12,6 +12,7 @@ keywords = ["robot", "robotics", "rerun", "visualization", "roplat"]
 [dependencies]
 rerun = "0.26.0"
 roplat_behavior = "0.9.0"
+roplat_world = "0.9.0"
 rerun_urdf = "0.2.0"
 rsbullet = "0.7.0"
 nalgebra = "0.34.1"
