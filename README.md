@@ -4,6 +4,20 @@
 
 Use it when you already have an `RsBulletRobot<R>` and want to inspect that robot through the shared `robot_behavior` builder interfaces. For a file recorder or a different pose source, use [rerun_urdf](https://github.com/Robot-Exp-Platform/rerun_urdf) directly; it accepts a recording stream and per-link poses without requiring a simulator.
 
+## Planning scene and points
+
+`log_scene` draws a `roplat_scene::PlanningScene` at a joint configuration: every link and object as the collision checks see it, the role of RViz's planning-scene display. Links are grey, objects in the world blue, attached objects orange. Each call clears its root entity first, so removed objects disappear. `log_points` draws a point cloud, such as a depth reading before it joins the scene.
+
+```rust
+use roplat_rerun::{log_points, log_scene};
+
+let rec = rerun::RecordingStreamBuilder::new("planning").spawn()?;
+log_scene(&rec, "scene", &scene, &q)?;                    // after each change, or each cycle
+log_points(&rec, "scene/seen", &points, 0.003, [0, 200, 0])?;
+```
+
+Neither needs a simulator: they read the scene's own geometry through `PlanningScene::meshes`.
+
 ## How the pieces fit
 
 `RerunHost` owns the recording connection and model search paths. Its `robot_builder::<R>(name)` reads the URDF named by `R: RobotDescription` and creates a `RerunRobot<R>`. Calling `visualization.attach_from(&mut simulated_robot)` moves that visualizer into a callback on the robot's simulation queue.
